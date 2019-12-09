@@ -1,0 +1,35 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: cvision-
+build:
+  artifacts:
+  - image: opencv
+    sync:
+      manual:
+      - src: 'src/**/*.py'
+        dest: .
+        strip: src/
+      - src: 'src/static/**'
+        dest: .
+        strip: src/
+deploy:
+  kubectl:
+    manifests:
+    - gen/*.yaml
+    - k8s/*
+    # kaniko:
+      # image: gcr.io/kaniko-project/executor:debug
+    #   image: agilestacks/sleepy 
+    #   # buildArgs:{}
+profiles:
+- name: local
+  activation:
+  - env: KUBECONFIG=!
+- name: incluster
+  build:
+    tagPolicy:
+      dateTime: {}
+    cluster:
+      dockerConfig: 
+        secretName: dockerconfig

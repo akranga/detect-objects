@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: detective
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: detective
+  template:
+    metadata:
+      labels:
+        app: detective
+    spec:
+      containers:
+      - name: detective
+        image: detective
+        imagePullPolicy: Always
+        env: 
+        - name: FLASK_ENV
+          value: docker
+        - name: SOURCE
+          value: rtsp://admin:admin@192.168.123.90:554/cam/realmonitor
+        - name: MODEL
+          value: /app/model/MobileNetSSD_deploy.caffemodel
+        - name: PROTOTXT
+          value: /app/model/MobileNetSSD_deploy.prototxt 
+        - name: CONFIDENCE
+          value: "0.2"                   
+        - name: OPENCV_LOG_LEVEL
+          value: v
+        - name: OPENCV_VIDEOIO_DEBUG
+          value: "1"
+          # value: http://131.173.8.23/mjpg/video.mjpg
+        ports:
+        - containerPort: 80
+      
+      # imagePullSecrets:
+      # - name: harbor-pullsecret
