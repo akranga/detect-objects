@@ -2,7 +2,7 @@ flask
 flask-json
 uptime
 numpy==1.17.2
-opencv-contrib-python==4.1.1.26
+opencv-contrib-python==4.2.0.32
 imutils==0.5.3
 waitress
 # gunicorn
